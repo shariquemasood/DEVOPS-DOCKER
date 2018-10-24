@@ -9,3 +9,7 @@ sudo docker swarm init  <br>
 sudo docker stack deploy -c docker-compose.yml myswarm <br>
 
 localhost:8181
+
+<br>
+<br>
+<a href="https://github.com/shariquemasood/Docker-Exercise-5.git">Docker Exercise 5</a>
