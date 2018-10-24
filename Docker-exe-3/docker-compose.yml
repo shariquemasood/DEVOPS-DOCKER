@@ -1,9 +1,6 @@
 version: '3'
 services:
       tomcat:
-        # build:
-        #   context: ./tomcat
-        #   dockerfile: Dockerfile
         container_name: tomcat8
         image: tomcat
         deploy:
@@ -13,17 +10,14 @@ services:
           -  ./proxyConf/server.xml:/usr/local/tomcat/conf/server.xml
 
       nginx:
-         # build:
-          # context: ./nginx
-          # dockerfile: Dockerfile
         container_name: nginx
         image: nginx
         deploy:
           replicas: 5
         links:
           - "tomcat"
-        #volumes:
-        #  - ./proxyConf:/etc/nginx/conf.d
+        volumes:
+          - ./proxyConf:/etc/nginx/conf.d
         depends_on: 
         - tomcat 
         ports:
@@ -36,7 +30,6 @@ services:
           retries: 3
 
 networks:
-   overlay:
-#  default:
-#    external:
-#      name: mynetwork
+  default:
+    external:
+      name: mynetwork
