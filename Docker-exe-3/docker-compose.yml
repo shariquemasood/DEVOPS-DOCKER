@@ -1,0 +1,42 @@
+version: '3'
+services:
+      tomcat:
+        # build:
+        #   context: ./tomcat
+        #   dockerfile: Dockerfile
+        container_name: tomcat8
+        image: tomcat
+        deploy:
+           replicas: 5
+        volumes:
+          -  ./sample/:/usr/local/tomcat/webapps/sample
+          -  ./proxyConf/server.xml:/usr/local/tomcat/conf/server.xml
+
+      nginx:
+         # build:
+          # context: ./nginx
+          # dockerfile: Dockerfile
+        container_name: nginx
+        image: nginx
+        deploy:
+          replicas: 5
+        links:
+          - "tomcat"
+        #volumes:
+        #  - ./proxyConf:/etc/nginx/conf.d
+        depends_on: 
+        - tomcat 
+        ports:
+          - "8080:80"
+          - "443:443"
+        healthcheck:
+          test: curl --fail -s http://localhost:8670/ || exit 1
+          interval: 1m30s
+          timeout: 10s
+          retries: 3
+
+networks:
+   overlay:
+#  default:
+#    external:
+#      name: mynetwork
