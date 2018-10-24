@@ -1,0 +1,27 @@
+version: '3'
+services:
+      nginx:
+        image: nginx
+        deploy:
+          replicas: 2 
+        links:
+          - "tomcat"
+        ports:
+          - "8181:80"
+          - "443:443"
+        volumes:
+          - ./proxyConf:/etc/nginx/conf.d
+        depends_on: 
+          - tomcat 
+      tomcat:
+        image: tomcat
+        deploy:
+           replicas: 2
+        ports:
+          - "8282:8080"
+        volumes:
+          -  ./sample/:/usr/local/tomcat/webapps/sample
+          -  ./proxyConf/server.xml:/usr/local/tomcat/conf/server.xml
+networks:
+   overlay:
+
